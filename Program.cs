@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ReboostDbContext>(options =>
 // Register Services
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<BatteryService>();
+builder.Services.AddScoped<CabinetService>();
 
 // Add Swagger Gen
 builder.Services.AddSwaggerGen(c =>
