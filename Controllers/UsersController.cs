@@ -80,6 +80,24 @@ namespace Reboost.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, [FromBody] User user)
+        {
+            try
+            {
+                var updatedUser = _userService.UpdateUser(id, user);
+                if (updatedUser != null)
+                {
+                    return Ok(updatedUser);
+                }
+                return NotFound("Usuário não encontrado.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao atualizar o usuário: " + ex.Message);
+            }
+        }
+
         [HttpPut("SoftDelete/{id}")]
         public IActionResult SoftDeleteUser(int id)
         {

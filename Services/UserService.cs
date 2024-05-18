@@ -43,6 +43,23 @@ public class UserService
         return true;
     }
 
+    public User? UpdateUser(int id, User user)
+    {
+        var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
+        if (existingUser != null)
+        {
+            existingUser.IsActive = user.IsActive;
+            existingUser.Name = user.Name;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
+            existingUser.Password = user.Password;
+
+            _context.SaveChanges();
+            return existingUser;
+        }
+        return null;
+    }
+
     public bool SoftDeleteUser(int id)
     {
         var user = _context.Users.Find(id);

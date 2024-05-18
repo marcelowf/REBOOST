@@ -46,6 +46,27 @@ public class CabinetService
         return true;
     }
 
+    public Cabinet? UpdateCabinet(int id, Cabinet cabinet)
+    {
+        var existingCabinet = _context.Cabinets.FirstOrDefault(c => c.Id == id);
+        if (existingCabinet != null)
+        {
+            existingCabinet.IsActive = cabinet.IsActive;
+            existingCabinet.ExternalCode = cabinet.ExternalCode;
+            existingCabinet.AddressZipCode = cabinet.AddressZipCode;
+            existingCabinet.AddressStreet = cabinet.AddressStreet;
+            existingCabinet.AddressNumber = cabinet.AddressNumber;
+            existingCabinet.AddressDistrict = cabinet.AddressDistrict;
+            existingCabinet.AddressLatitude = cabinet.AddressLatitude;
+            existingCabinet.AddressLongitude = cabinet.AddressLongitude;
+            existingCabinet.DrawerNumber = cabinet.DrawerNumber;
+
+            _context.SaveChanges();
+            return existingCabinet;
+        }
+        return null;
+    }
+
     public bool SoftDeleteCabinet(int id)
     {
         var cabinet = _context.Cabinets.Find(id);
