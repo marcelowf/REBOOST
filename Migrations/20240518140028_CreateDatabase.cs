@@ -17,6 +17,7 @@ namespace REBOOST.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ExternalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Brand = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
@@ -35,6 +36,7 @@ namespace REBOOST.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ExternalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressZipCode = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     AddressStreet = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
@@ -100,6 +102,7 @@ namespace REBOOST.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     BatteryId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinishDate = table.Column<DateTime>(type: "datetime2", nullable: true),

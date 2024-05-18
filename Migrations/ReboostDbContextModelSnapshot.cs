@@ -41,6 +41,9 @@ namespace REBOOST.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Model")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
@@ -92,6 +95,9 @@ namespace REBOOST.Migrations
                     b.Property<string>("ExternalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -152,6 +158,9 @@ namespace REBOOST.Migrations
 
                     b.Property<int>("FkUserId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

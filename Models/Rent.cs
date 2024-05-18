@@ -7,6 +7,7 @@ namespace Reboost
     public class Rent
     {
         private int _Id;
+        private bool _IsActive;
         private string? _BatteryId;
         private DateTime _BeginDate;
         private DateTime? _FinishDate;
@@ -21,6 +22,12 @@ namespace Reboost
         {
             get { return _Id; }
             set { _Id = value; }
+        }
+
+        public bool IsActive 
+        {
+            get { return _IsActive; }
+            set { _IsActive = value; }
         }
 
         public string? BatteryId

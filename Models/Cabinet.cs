@@ -7,6 +7,7 @@ namespace Reboost
     public class Cabinet
     {
         private int _Id;
+        private bool _IsActive;
         private string? _ExternalCode;
         private string? _AddressZipCode;
         private string? _AddressStreet;
@@ -22,6 +23,12 @@ namespace Reboost
         {
             get { return _Id; }
             set { _Id = value; }
+        }
+
+        public bool IsActive 
+        {
+            get { return _IsActive; }
+            set { _IsActive = value; }
         }
 
         [Required]
