@@ -19,10 +19,21 @@ namespace Reboost
             set { _Id = value; }
         }
 
+        [Required]
         public int Order
         {
             get { return _Order; }
-            set { _Order = value; }
+            set
+            {
+                if (value >= 0)
+                {
+                    _Order = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Order must be a positive integer.");
+                }
+            }
         }
 
         [Required]

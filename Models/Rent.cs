@@ -8,7 +8,6 @@ namespace Reboost
     {
         private int _Id;
         private bool _IsActive;
-        private string? _BatteryId;
         private DateTime _BeginDate;
         private DateTime? _FinishDate;
         private int _FkCabinetFromId;
@@ -28,22 +27,6 @@ namespace Reboost
         {
             get { return _IsActive; }
             set { _IsActive = value; }
-        }
-
-        public string? BatteryId
-        {
-            get { return _BatteryId; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    _BatteryId = value;
-                }
-                else
-                {
-                    throw new ArgumentException("BatteryId cannot be null or empty.");
-                }
-            }
         }
 
         [Required]
