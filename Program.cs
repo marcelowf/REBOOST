@@ -11,8 +11,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ReboostDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register UserService
+// Register Services
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<BatteryService>();
 
 // Add Swagger Gen
 builder.Services.AddSwaggerGen(c =>

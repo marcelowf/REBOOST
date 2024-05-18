@@ -7,6 +7,7 @@ namespace Reboost
     public class Battery
     {
         private int _Id;
+        private bool _IsActive;
         private string? _ExternalCode;
         private string? _Model;
         private string? _Brand;
@@ -20,6 +21,12 @@ namespace Reboost
         {
             get { return _Id; }
             set { _Id = value; }
+        }
+
+        public bool IsActive 
+        {
+            get { return _IsActive; }
+            set { _IsActive = value; }
         }
 
         [Required]

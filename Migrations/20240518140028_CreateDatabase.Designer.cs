@@ -12,7 +12,7 @@ using Reboost;
 namespace REBOOST.Migrations
 {
     [DbContext(typeof(ReboostDbContext))]
-    [Migration("20240518130133_CreateDatabase")]
+    [Migration("20240518140028_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -43,6 +43,9 @@ namespace REBOOST.Migrations
                     b.Property<string>("ExternalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Model")
                         .HasMaxLength(30)
@@ -95,6 +98,9 @@ namespace REBOOST.Migrations
                     b.Property<string>("ExternalCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -155,6 +161,9 @@ namespace REBOOST.Migrations
 
                     b.Property<int>("FkUserId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
