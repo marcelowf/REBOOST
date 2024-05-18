@@ -79,6 +79,24 @@ namespace Reboost.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateBattery(int id, [FromBody] Battery battery)
+        {
+            try
+            {
+                var updatedBattery = _batteryService.UpdateBattery(id, battery);
+                if (updatedBattery != null)
+                {
+                    return Ok(updatedBattery);
+                }
+                return NotFound("Bateria não encontrada.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao atualizar a bateria: " + ex.Message);
+            }
+        }
+
         [HttpPut("SoftDelete/{id}")]
         public IActionResult SoftDeleteBattery(int id)
         {

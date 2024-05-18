@@ -80,6 +80,24 @@ namespace Reboost.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateCabinet(int id, [FromBody] Cabinet cabinet)
+        {
+            try
+            {
+                var updatedCabinet = _cabinetService.UpdateCabinet(id, cabinet);
+                if (updatedCabinet != null)
+                {
+                    return Ok(updatedCabinet);
+                }
+                return NotFound("Armário não encontrado.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao atualizar o armário: " + ex.Message);
+            }
+        }
+
         [HttpPut("SoftDelete/{id}")]
         public IActionResult SoftDeleteCabinet(int id)
         {
