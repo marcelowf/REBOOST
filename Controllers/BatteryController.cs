@@ -16,7 +16,7 @@ namespace Reboost.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostBattery([FromForm] Battery battery)
+        public IActionResult PostBattery([FromBody] Battery battery)
         {
             try
             {

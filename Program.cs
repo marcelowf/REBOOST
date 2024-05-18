@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Reboost;
+using Reboost.Models;
+using Reboost.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,10 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<BatteryService>();
 builder.Services.AddScoped<CabinetService>();
 builder.Services.AddScoped<RentService>();
+builder.Services.AddScoped<TokenService>();
+
+// Alterado para Singleton, já que o TokenCleanupService deve rodar continuamente
+builder.Services.AddSingleton<TokenCleanupService>();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -48,5 +54,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Garantir que o TokenCleanupService seja inicializado
+app.Services.GetService<TokenCleanupService>();
 
 app.Run();

@@ -17,7 +17,7 @@ namespace Reboost.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostCabinet([FromForm] Cabinet cabinet)
+        public IActionResult PostCabinet([FromBody] Cabinet cabinet)
         {
             try
             {

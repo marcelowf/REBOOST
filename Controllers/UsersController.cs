@@ -17,7 +17,7 @@ namespace Reboost.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostUser([FromForm] User user)
+        public IActionResult PostUser([FromBody] User user)
         {
             try
             {

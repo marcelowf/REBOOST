@@ -57,7 +57,9 @@ namespace REBOOST.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Billing = table.Column<float>(type: "real", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
@@ -140,6 +142,41 @@ namespace REBOOST.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    FkCabinetId = table.Column<int>(type: "int", nullable: false),
+                    FkUserId = table.Column<int>(type: "int", nullable: false),
+                    FkBatteryId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tokens_Batteries_FkBatteryId",
+                        column: x => x.FkBatteryId,
+                        principalTable: "Batteries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tokens_Cabinets_FkCabinetId",
+                        column: x => x.FkCabinetId,
+                        principalTable: "Cabinets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tokens_Users_FkUserId",
+                        column: x => x.FkUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CabinetBatteries_FkBatteryId",
                 table: "CabinetBatteries",
@@ -169,6 +206,21 @@ namespace REBOOST.Migrations
                 name: "IX_Rents_FkUserId",
                 table: "Rents",
                 column: "FkUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tokens_FkBatteryId",
+                table: "Tokens",
+                column: "FkBatteryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tokens_FkCabinetId",
+                table: "Tokens",
+                column: "FkCabinetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tokens_FkUserId",
+                table: "Tokens",
+                column: "FkUserId");
         }
 
         /// <inheritdoc />
@@ -179,6 +231,9 @@ namespace REBOOST.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rents");
+
+            migrationBuilder.DropTable(
+                name: "Tokens");
 
             migrationBuilder.DropTable(
                 name: "Batteries");

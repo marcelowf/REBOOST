@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Reboost.Models;
 
 namespace Reboost
 {
     public class ReboostDbContext : DbContext
     {
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Token> Tokens { get; set; } = null!;
         public DbSet<Battery> Batteries { get; set; } = null!;
         public DbSet<Cabinet> Cabinets { get; set; } = null!;
         public DbSet<CabinetBattery> CabinetBatteries { get; set; } = null!;
@@ -46,6 +48,22 @@ namespace Reboost
                 .WithMany()
                 .HasForeignKey(r => r.FkCabinetToId)
                 .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Token>()
+                .HasOne<Cabinet>()
+                .WithMany()
+                .HasForeignKey(r => r.FkCabinetId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<Token>()
+                .HasOne<Battery>()
+                .WithMany()
+                .HasForeignKey(r => r.FkBatteryId);
+            
+            modelBuilder.Entity<Token>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(r => r.FkUserId);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

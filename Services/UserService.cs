@@ -16,6 +16,7 @@ public class UserService
     {
         user.Id = 0;
         user.IsActive = true;
+        user.Billing = 0;
         user.LastLogin = DateTime.UtcNow;
         user.CreatedAt = DateTime.UtcNow;
 
@@ -49,10 +50,12 @@ public class UserService
         if (existingUser != null)
         {
             existingUser.IsActive = user.IsActive;
+            existingUser.IsAdmin = user.IsAdmin;
             existingUser.Name = user.Name;
             existingUser.Email = user.Email;
             existingUser.Password = user.Password;
-            existingUser.Password = user.Password;
+            existingUser.Billing = user.Billing;
+            existingUser.LastLogin = user.LastLogin;
 
             _context.SaveChanges();
             return existingUser;
