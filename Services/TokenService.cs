@@ -8,8 +8,6 @@ namespace Reboost.Services
     public class TokenService
     {
         private readonly ReboostDbContext _context;
-        private Timer _timer;
-
         public TokenService(ReboostDbContext context)
         {
             _context = context;

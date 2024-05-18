@@ -78,7 +78,6 @@ namespace Reboost
             var existingRent = _context.Rents.FirstOrDefault(r => r.Id == id);
             if (existingRent != null)
             {
-                existingRent.BatteryId = rent.BatteryId;
                 existingRent.BeginDate = rent.BeginDate;
                 existingRent.FinishDate = rent.FinishDate;
                 existingRent.FkCabinetFromId = rent.FkCabinetFromId;
