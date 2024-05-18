@@ -1,15 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Reboost {
-
-public class ApplicationDbContext : DbContext {
+namespace Reboost
+{
+    public class ReboostDbContext : DbContext
+    {
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Battery> Batteries { get; set; } = null!;
         public DbSet<Cabinet> Cabinets { get; set; } = null!;
         public DbSet<CabinetBattery> CabinetBatteries { get; set; } = null!;
         public DbSet<Rent> Rents { get; set; } = null!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        public ReboostDbContext(DbContextOptions<ReboostDbContext> options) : base(options) {}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<CabinetBattery>()
@@ -41,14 +45,15 @@ public class ApplicationDbContext : DbContext {
                 .HasOne<Cabinet>()
                 .WithMany()
                 .HasForeignKey(r => r.FkCabinetToId)
-                // Evitar a exclusão em cascata
                 .OnDelete(DeleteBehavior.Restrict); 
         }
 
-        // Mudar isto para variável de ambiente ou KeyVault
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            // optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=REBOOST-PROD;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
-            optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=REBOOST-QA;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=REBOOST-QA;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
+            }
         }
     }
 }

@@ -1,32 +1,101 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Reboost;
 
-namespace REBOOST.Controllers
+namespace Reboost.Controllers
 {
     [Route("[controller]")]
-    public class UsersController : Controller
+    [ApiController]
+    public class UsersController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
+        private readonly UserService _userService;
 
-        public UsersController(ILogger<UsersController> logger)
+        public UsersController(UserService userService)
         {
-            _logger = logger;
+            _userService = userService;
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult PostUser([FromForm] User user)
         {
-            return View();
+            try
+            {
+                _userService.PostUser(user);
+                return Ok("Funcionário cadastrado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao cadastrar o funcionário: " + ex.Message);
+            }
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet("{id}")]
+        public IActionResult GetUserById(int id)
         {
-            return View("Error!");
+            try
+            {
+                var user = _userService.GetUserById(id);
+                if (user == null)
+                {
+                    return NotFound("Usuário não encontrado.");
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao obter o usuário: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAllUsers()
+        {
+            try
+            {
+                var users = _userService.GetAllUsers();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao obter os usuários: " + ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            try
+            {
+                var result = _userService.DeleteUser(id);
+                if (!result)
+                {
+                    return NotFound("Usuário não encontrado.");
+                }
+                return Ok("Usuário deletado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao deletar o usuário: " + ex.Message);
+            }
+        }
+
+        [HttpPut("SoftDelete/{id}")]
+        public IActionResult SoftDeleteUser(int id)
+        {
+            try
+            {
+                var result = _userService.SoftDeleteUser(id);
+                if (!result)
+                {
+                    return NotFound("Usuário não encontrado.");
+                }
+                return Ok("Usuário desativado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Ocorreu um erro ao desativar o usuário: " + ex.Message);
+            }
         }
     }
 }

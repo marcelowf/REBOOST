@@ -11,8 +11,8 @@ using Reboost;
 
 namespace REBOOST.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240518032101_CreateDatabase")]
+    [DbContext(typeof(ReboostDbContext))]
+    [Migration("20240518130133_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -184,6 +184,9 @@ namespace REBOOST.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");

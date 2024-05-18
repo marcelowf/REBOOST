@@ -7,6 +7,7 @@ namespace Reboost
     public class User
     {
         private int _Id;
+        private bool _IsActive;
         private string? _Name;
         private string? _Email;
         private string? _Password;
@@ -19,6 +20,12 @@ namespace Reboost
         {
             get { return _Id; }
             set { _Id = value; }
+        }
+
+        public bool IsActive 
+        {
+            get { return _IsActive; }
+            set { _IsActive = value; }
         }
 
         [Required]
