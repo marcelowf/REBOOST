@@ -60,14 +60,14 @@ namespace Reboost
         }
 
         [Required]
-        [ForeignKey("FK_Rent_Cabinet")]
+        [ForeignKey("FK_Rent_CabinetFrom")]
         public int FkCabinetFromId
         {
             get { return _FkCabinetFromId; }
             set { _FkCabinetFromId = value; }
         }
 
-        [ForeignKey("FK_Rent_Cabinet")]
+        [ForeignKey("FK_Rent_CabinetTo")]
         public int FkCabinetToId
         {
             get { return _FkCabinetToId; }

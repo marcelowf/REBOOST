@@ -7,7 +7,9 @@ namespace Reboost
     public class User
     {
         private int _Id;
+        private bool _IsAdmin;
         private bool _IsActive;
+        private float _Billing;
         private string? _Name;
         private string? _Email;
         private string? _Password;
@@ -22,10 +24,22 @@ namespace Reboost
             set { _Id = value; }
         }
 
+        public bool IsAdmin 
+        {
+            get { return _IsAdmin; }
+            set { _IsAdmin = value; }
+        }
+
         public bool IsActive 
         {
             get { return _IsActive; }
             set { _IsActive = value; }
+        }
+        
+        public float Billing 
+        {
+            get { return _Billing; }
+            set { _Billing = value; }
         }
 
         [Required]

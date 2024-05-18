@@ -130,6 +130,42 @@ namespace REBOOST.Migrations
                     b.ToTable("CabinetBatteries");
                 });
 
+            modelBuilder.Entity("Reboost.Models.Token", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FkBatteryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FkCabinetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FkUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FkBatteryId");
+
+                    b.HasIndex("FkCabinetId");
+
+                    b.HasIndex("FkUserId");
+
+                    b.ToTable("Tokens");
+                });
+
             modelBuilder.Entity("Reboost.Rent", b =>
                 {
                     b.Property<int>("Id")
@@ -183,6 +219,9 @@ namespace REBOOST.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<float>("Billing")
+                        .HasColumnType("real");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -192,6 +231,9 @@ namespace REBOOST.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
@@ -223,6 +265,27 @@ namespace REBOOST.Migrations
                     b.HasOne("Reboost.Cabinet", null)
                         .WithMany()
                         .HasForeignKey("FkCabinetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Reboost.Models.Token", b =>
+                {
+                    b.HasOne("Reboost.Battery", null)
+                        .WithMany()
+                        .HasForeignKey("FkBatteryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Reboost.Cabinet", null)
+                        .WithMany()
+                        .HasForeignKey("FkCabinetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Reboost.User", null)
+                        .WithMany()
+                        .HasForeignKey("FkUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
