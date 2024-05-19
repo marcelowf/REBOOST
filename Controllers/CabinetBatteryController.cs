@@ -36,10 +36,6 @@ namespace Reboost.Controllers
                 var createdCabinetBattery = _cabinetBatteryService.CreateCabinetBattery(cabinetBattery);
                 return CreatedAtAction(nameof(GetById), new { id = createdCabinetBattery.Id }, createdCabinetBattery);
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
