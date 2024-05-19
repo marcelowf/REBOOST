@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Reboost.Services;
+using System;
+using System.Linq;
 
 namespace Reboost.Controllers
 {
@@ -19,29 +21,43 @@ namespace Reboost.Controllers
         [HttpGet("GetTemporaryToken")]
         public IActionResult GetTokenValue(int fkCabinetId, int fkBatteryId, int fkUserId)
         {
-            var tokenValue = _tokenService.GetTokenValue(fkCabinetId, fkBatteryId, fkUserId);
-            if (tokenValue != null)
+            try
             {
-                return Ok(tokenValue);
+                var tokenValue = _tokenService.GetTokenValue(fkCabinetId, fkBatteryId, fkUserId);
+                if (tokenValue != null)
+                {
+                    return Ok(tokenValue);
+                }
+                return NotFound("Token could not be generated.");
             }
-            return NotFound("Token could not be generated.");
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to generate token: {ex.Message}");
+            }
         }
 
         [HttpPost("GetTemporaryTokenInfo/{token}")]
         public IActionResult GetTokenInfo(string token)
         {
-            var tokenEntity = _context.Tokens.FirstOrDefault(t => t.Value == token);
-            if (tokenEntity == null)
+            try
             {
-                return NotFound("Token not found");
+                var tokenEntity = _context.Tokens.FirstOrDefault(t => t.Value == token);
+                if (tokenEntity == null)
+                {
+                    return NotFound("Token not found");
+                }
+
+                return Ok(new
+                {
+                    UserId = tokenEntity.FkUserId,
+                    BatteryId = tokenEntity.FkBatteryId,
+                    CabinetId = tokenEntity.FkCabinetId
+                });
             }
-            
-            return Ok(new
+            catch (Exception ex)
             {
-                UserId = tokenEntity.FkUserId,
-                BatteryId = tokenEntity.FkBatteryId,
-                CabinetId = tokenEntity.FkCabinetId
-            });
+                return BadRequest($"Failed to retrieve token info: {ex.Message}");
+            }
         }
     }
 }

@@ -30,17 +30,24 @@ namespace Reboost.Controllers
         [HttpPost("Login")]
         public IActionResult Login(string Email, string Password)
         {
-            var User = _userService.ValidateUser(Email, Password);
-
-            if (User == null)
+            try
             {
-                Console.WriteLine(Email, Password);
-                return Unauthorized();
+                var User = _userService.ValidateUser(Email, Password);
+
+                if (User == null)
+                {
+                    Console.WriteLine(Email, Password);
+                    return Unauthorized();
+                }
+
+                var token = _userService.GenerateToken(User);
+
+                return Ok(new { Token = token });
             }
-
-            var token = _userService.GenerateToken(User);
-
-            return Ok(new { Token = token });
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to login: {ex.Message}");
+            }
         }
 
         [HttpPost("DecodeLoginToken")]
