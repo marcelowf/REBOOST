@@ -140,3 +140,4 @@ C:\REBOOST\obj\Debug\net8.0\REBOOST.pdb
 C:\REBOOST\obj\Debug\net8.0\REBOOST.genruntimeconfig.cache
 C:\REBOOST\obj\Debug\net8.0\ref\REBOOST.dll
 C:\REBOOST\obj\Debug\net8.0\REBOOST.sourcelink.json
+C:\REBOOST\bin\Debug\net8.0\BCrypt.Net-Next.dll

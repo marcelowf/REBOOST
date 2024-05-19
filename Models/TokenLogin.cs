@@ -3,15 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Reboost.Models
 {
-    public class Token
+    public class TokenLogin
     {
         private int _Id;
         private string? _Value;
-        private int _FkCabinetId;
-        private int _FkBatteryId;
+        private string? _Email;
         private int _FkUserId;
-        private DateTime? _CreatedAt;
-
+        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id
@@ -39,11 +37,22 @@ namespace Reboost.Models
         }
 
         [Required]
-        [ForeignKey("FK_Rent_Cabinet")]
-        public int FkCabinetId
+        [EmailAddress]
+        [MaxLength(50)]
+        public string? Email
         {
-            get { return _FkCabinetId; }
-            set { _FkCabinetId = value; }
+            get { return _Email; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _Email = value;
+                }
+                else
+                {
+                    throw new ArgumentException("Email cannot be null or empty.");
+                }
+            }
         }
 
         [Required]
@@ -52,21 +61,6 @@ namespace Reboost.Models
         {
             get { return _FkUserId; }
             set { _FkUserId = value; }
-        }
-
-        [Required]
-        [ForeignKey("FK_Rent_Battery")]
-        public int FkBatteryId
-        {
-            get { return _FkBatteryId; }
-            set { _FkBatteryId = value; }
-        }
-        
-        [DataType(DataType.DateTime)]
-        public DateTime? CreatedAt
-        {
-            get { return _CreatedAt; }
-            set { _CreatedAt = value; }
         }
     }
 }

@@ -142,6 +142,27 @@ namespace REBOOST.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TokenLogins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    FkUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TokenLogins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TokenLogins_Users_FkUserId",
+                        column: x => x.FkUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tokens",
                 columns: table => new
                 {
@@ -207,6 +228,11 @@ namespace REBOOST.Migrations
                 column: "FkUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TokenLogins_FkUserId",
+                table: "TokenLogins",
+                column: "FkUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tokens_FkBatteryId",
                 table: "Tokens",
                 column: "FkBatteryId");
@@ -230,6 +256,9 @@ namespace REBOOST.Migrations
 
             migrationBuilder.DropTable(
                 name: "Rents");
+
+            migrationBuilder.DropTable(
+                name: "TokenLogins");
 
             migrationBuilder.DropTable(
                 name: "Tokens");

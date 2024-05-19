@@ -8,13 +8,15 @@ namespace Reboost.Controllers
     public class TokenController : ControllerBase
     {
         private readonly TokenService _tokenService;
+        private readonly ReboostDbContext _context;
 
-        public TokenController(TokenService tokenService)
+        public TokenController(TokenService tokenService, ReboostDbContext context)
         {
             _tokenService = tokenService;
+            _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("GetTemporaryToken")]
         public IActionResult GetTokenValue(int fkCabinetId, int fkBatteryId, int fkUserId)
         {
             var tokenValue = _tokenService.GetTokenValue(fkCabinetId, fkBatteryId, fkUserId);
@@ -25,15 +27,21 @@ namespace Reboost.Controllers
             return NotFound("Token could not be generated.");
         }
 
-        [HttpGet("Change")]
-        public IActionResult ChangeTokenValue(int fkCabinetId, int fkBatteryId, int fkUserId)
+        [HttpPost("GetTemporaryTokenInfo/{token}")]
+        public IActionResult GetTokenInfo(string token)
         {
-            var tokenValue = _tokenService.ChangeTokenValue(fkCabinetId, fkBatteryId, fkUserId);
-            if (tokenValue != null)
+            var tokenEntity = _context.Tokens.FirstOrDefault(t => t.Value == token);
+            if (tokenEntity == null)
             {
-                return Ok(tokenValue);
+                return NotFound("Token not found");
             }
-            return NotFound("Token not found.");
+            
+            return Ok(new
+            {
+                UserId = tokenEntity.FkUserId,
+                BatteryId = tokenEntity.FkBatteryId,
+                CabinetId = tokenEntity.FkCabinetId
+            });
         }
     }
 }

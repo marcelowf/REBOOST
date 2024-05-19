@@ -6,6 +6,7 @@ namespace Reboost
     public class ReboostDbContext : DbContext
     {
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<TokenLogin> TokenLogins { get; set; } = null!;
         public DbSet<Token> Tokens { get; set; } = null!;
         public DbSet<Battery> Batteries { get; set; } = null!;
         public DbSet<Cabinet> Cabinets { get; set; } = null!;
@@ -61,6 +62,11 @@ namespace Reboost
                 .HasForeignKey(r => r.FkBatteryId);
             
             modelBuilder.Entity<Token>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(r => r.FkUserId);
+                
+            modelBuilder.Entity<TokenLogin>()
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(r => r.FkUserId);

@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Reboost;
+using Reboost.Models;
 
 public class UserService
 {
@@ -22,6 +22,67 @@ public class UserService
 
         _context.Users.Add(user);
         _context.SaveChanges();
+    }
+
+    public User? ValidateUser(string email, string password)
+    {
+        var user = _context.Users.SingleOrDefault(u => u.Email == email && u.Password == password);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return user;
+    }
+
+    public TokenLogin GenerateToken(User user)
+    {
+        string combinedString = $"{user.Id}-{user.Email}";
+
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(combinedString));
+
+            StringBuilder hexString = new StringBuilder();
+            foreach (byte b in hashBytes)
+            {
+                hexString.Append(b.ToString("x2"));
+            }
+
+            string tokenValue = hexString.ToString().Substring(0, 8);
+
+            var tokenLogin = new TokenLogin
+            {
+                Value = tokenValue,
+                Email = user.Email,
+                FkUserId = user.Id
+            };
+
+            _context.TokenLogins.Add(tokenLogin);
+            _context.SaveChanges();
+
+            return tokenLogin;
+        }
+    }
+
+    public (string? Email, int UserId)? DecodeToken(string token)
+    {
+        var tokenEntity = _context.TokenLogins.FirstOrDefault(t => t.Value == token);
+
+        if (tokenEntity == null)
+        {
+            return null;
+        }
+
+        var user = _context.Users.FirstOrDefault(u => u.Id == tokenEntity.FkUserId);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return (user.Email, user.Id);
     }
 
     public User? GetUserById(int id)
