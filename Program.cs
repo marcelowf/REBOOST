@@ -16,8 +16,9 @@ builder.Services.AddScoped<BatteryService>();
 builder.Services.AddScoped<CabinetService>();
 builder.Services.AddScoped<RentService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<CabinetBatteryService>();
 
-// Alterado para Singleton, já que o TokenCleanupService deve rodar continuamente
+// Uso de Singleton para rodar continuamente
 builder.Services.AddSingleton<TokenCleanupService>();
 
 builder.Services.AddSwaggerGen(c =>

@@ -1,25 +1,19 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
-using Reboost;
 
 namespace Reboost.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class BatteryController : ControllerBase
-    {
+    public class BatteryController : ControllerBase {
         private readonly BatteryService _batteryService;
 
-        public BatteryController(BatteryService batteryService)
-        {
+        public BatteryController(BatteryService batteryService) {
             _batteryService = batteryService;
         }
 
         [HttpPost]
-        public IActionResult PostBattery([FromBody] Battery battery)
-        {
-            try
-            {
+        public IActionResult PostBattery([FromBody] Battery battery) {
+            try {
                 _batteryService.PostBattery(battery);
                 return Ok("Bateria cadastrada com sucesso.");
             }

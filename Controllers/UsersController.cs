@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Reboost;
 
 namespace Reboost.Controllers
 {
@@ -27,6 +24,48 @@ namespace Reboost.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Ocorreu um erro ao cadastrar o funcionário: " + ex.Message);
+            }
+        }
+
+        [HttpPost("Login")]
+        public IActionResult Login(string Email, string Password)
+        {
+            var User = _userService.ValidateUser(Email, Password);
+
+            if (User == null)
+            {
+                Console.WriteLine(Email, Password);
+                return Unauthorized();
+            }
+
+            var token = _userService.GenerateToken(User);
+
+            return Ok(new { Token = token });
+        }
+
+        [HttpPost("DecodeLoginToken")]
+        public IActionResult DecodeLoginToken(string token)
+        {
+            try
+            {
+                var decodedInfo = _userService.DecodeToken(token);
+                
+                if (decodedInfo == null)
+                {
+                    return NotFound("Token not found");
+                }
+
+                var result = new
+                {
+                    Email = decodedInfo.Value.Email,
+                    UserId = decodedInfo.Value.UserId
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Failed to decode token: " + ex.Message);
             }
         }
 

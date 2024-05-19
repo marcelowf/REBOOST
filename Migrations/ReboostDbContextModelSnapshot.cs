@@ -166,6 +166,34 @@ namespace REBOOST.Migrations
                     b.ToTable("Tokens");
                 });
 
+            modelBuilder.Entity("Reboost.Models.TokenLogin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("FkUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FkUserId");
+
+                    b.ToTable("TokenLogins");
+                });
+
             modelBuilder.Entity("Reboost.Rent", b =>
                 {
                     b.Property<int>("Id")
@@ -280,6 +308,15 @@ namespace REBOOST.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Reboost.User", null)
+                        .WithMany()
+                        .HasForeignKey("FkUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Reboost.Models.TokenLogin", b =>
+                {
                     b.HasOne("Reboost.User", null)
                         .WithMany()
                         .HasForeignKey("FkUserId")

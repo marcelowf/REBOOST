@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
 using Reboost.Models;
 
 namespace Reboost.Services
@@ -38,27 +35,6 @@ namespace Reboost.Services
                 _context.Tokens.Add(newToken);
                 _context.SaveChanges();
                 return newValue;
-            }
-        }
-
-        public string? ChangeTokenValue(int fkCabinetId, int fkBatteryId, int fkUserId)
-        {
-            var token = _context.Tokens.FirstOrDefault(t =>
-                t.FkCabinetId == fkCabinetId &&
-                t.FkBatteryId == fkBatteryId &&
-                t.FkUserId == fkUserId);
-
-            if (token != null)
-            {
-                var newValue = GenerateRandomToken();
-                token.Value = newValue;
-                token.CreatedAt = DateTime.Now;
-                _context.SaveChanges();
-                return newValue;
-            }
-            else
-            {
-                return null;
             }
         }
 

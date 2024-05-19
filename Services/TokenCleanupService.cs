@@ -1,9 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using Reboost.Models;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Reboost.Services
 {
     public class TokenCleanupService
@@ -22,7 +16,7 @@ namespace Reboost.Services
             using (var scope = _scopeFactory.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ReboostDbContext>();
-                var cutoffTime = DateTime.Now.AddMinutes(-10);
+                var cutoffTime = DateTime.Now.AddMinutes(-15);
                 var oldTokens = context.Tokens.Where(t => t.CreatedAt < cutoffTime).ToList();
 
                 if (oldTokens.Any())
