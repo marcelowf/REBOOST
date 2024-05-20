@@ -18,12 +18,29 @@ public class BatteryService
 
     public Battery? GetBatteryById(int id)
     {
-        return _context.Batteries.Find(id);
+        return _context.Batteries.FirstOrDefault(b => b.Id == id);
     }
 
     public List<Battery> GetAllBatteries()
     {
         return _context.Batteries.ToList();
+    }
+
+    public List<Battery> GetFilteredBatteries(string? brand, string? model)
+    {
+        var query = _context.Batteries.AsQueryable();
+
+        if (!string.IsNullOrEmpty(brand))
+        {
+            query = query.Where(b => b.Brand == brand);
+        }
+
+        if (!string.IsNullOrEmpty(model))
+        {
+            query = query.Where(b => b.Model == model);
+        }
+
+        return query.ToList();
     }
 
     public bool DeleteBattery(int id)

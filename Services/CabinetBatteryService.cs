@@ -74,5 +74,19 @@ namespace Reboost.Services
             _context.CabinetBatteries.Remove(cabinetBatteryToDelete);
             _context.SaveChanges();
         }
+
+        public List<CabinetBattery> GetByCabinetId(int cabinetId)
+        {
+            var cabinetBatteries = _context.CabinetBatteries
+                .Where(cb => cb.FkCabinetId == cabinetId)
+                .ToList();
+
+            if (cabinetBatteries == null || !cabinetBatteries.Any())
+            {
+                throw new ArgumentException("No batteries found for the given cabinet ID.");
+            }
+
+            return cabinetBatteries;
+        }
     }
 }

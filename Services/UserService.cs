@@ -87,12 +87,38 @@ public class UserService
 
     public User? GetUserById(int id)
     {
-        return _context.Users.Find(id);
+        try
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == id);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Error retrieving user by ID", ex);
+        }
     }
 
-    public IEnumerable<User> GetAllUsers()
+    public List<User> GetUsers(int? userId, string? email)
     {
-        return _context.Users.ToList();
+        try
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (userId.HasValue)
+            {
+                query = query.Where(u => u.Id == userId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                query = query.Where(u => u.Email == email);
+            }
+
+            return query.ToList();
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Error retrieving users", ex);
+        }
     }
 
     public bool DeleteUser(int id)

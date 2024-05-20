@@ -12,7 +12,7 @@ using Reboost;
 namespace REBOOST.Migrations
 {
     [DbContext(typeof(ReboostDbContext))]
-    [Migration("20240519170025_CreateDatabase")]
+    [Migration("20240520025026_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -214,10 +214,10 @@ namespace REBOOST.Migrations
                     b.Property<int>("FkBatteryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FkCabinetFromId")
+                    b.Property<int?>("FkCabinetFromId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FkCabinetToId")
+                    b.Property<int?>("FkCabinetToId")
                         .HasColumnType("int");
 
                     b.Property<int>("FkUserId")
@@ -332,20 +332,17 @@ namespace REBOOST.Migrations
                     b.HasOne("Reboost.Battery", null)
                         .WithMany()
                         .HasForeignKey("FkBatteryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Reboost.Cabinet", null)
                         .WithMany()
-                        .HasForeignKey("FkCabinetFromId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FkCabinetFromId");
 
                     b.HasOne("Reboost.Cabinet", null)
                         .WithMany()
                         .HasForeignKey("FkCabinetToId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Reboost.User", null)
                         .WithMany()

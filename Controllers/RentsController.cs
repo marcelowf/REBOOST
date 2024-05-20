@@ -46,12 +46,20 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllRents()
+        public IActionResult GetAllRents([FromQuery] int? userId)
         {
             try
             {
-                var rents = _rentService.GetAllRents();
-                return Ok(rents);
+                if (userId.HasValue)
+                {
+                    var rents = _rentService.GetRentsByUserId(userId.Value);
+                    return Ok(rents);
+                }
+                else
+                {
+                    var rents = _rentService.GetAllRents();
+                    return Ok(rents);
+                }
             }
             catch (Exception ex)
             {
