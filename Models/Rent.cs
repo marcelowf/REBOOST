@@ -41,7 +41,6 @@ namespace Reboost
             set { _FinishDate = value; }
         }
 
-        [Required]
         [ForeignKey("FK_Rent_CabinetFrom")]
         public int FkCabinetFromId
         {

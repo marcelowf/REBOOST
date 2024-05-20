@@ -95,11 +95,11 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllUsers()
+        public IActionResult GetUsers([FromQuery] int? userId, [FromQuery] string? email)
         {
             try
             {
-                var users = _userService.GetAllUsers();
+                var users = _userService.GetUsers(userId, email);
                 return Ok(users);
             }
             catch (Exception ex)

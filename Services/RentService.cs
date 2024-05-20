@@ -42,7 +42,8 @@ namespace Reboost
             }
 
             rent.IsActive = true;
-            rent.BeginDate = DateTime.UtcNow;
+            // Demanda para a retirada da funcionalidade    
+            // rent.BeginDate = DateTime.UtcNow;
             _context.Rents.Add(rent);
             _context.SaveChanges();
         }
@@ -55,6 +56,11 @@ namespace Reboost
         public IEnumerable<Rent> GetAllRents()
         {
             return _context.Rents.ToList();
+        }
+
+        public IEnumerable<Rent> GetRentsByUserId(int userId)
+        {
+            return _context.Rents.Where(r => r.FkUserId == userId).ToList();
         }
 
         public bool DeleteRent(int id)
@@ -99,6 +105,25 @@ namespace Reboost
             rent.IsActive = false;
             _context.SaveChanges();
             return true;
+        }
+
+        public List<Rent> GetRents(int? userId)
+        {
+            try
+            {
+                var query = _context.Rents.AsQueryable();
+
+                if (userId.HasValue)
+                {
+                    query = query.Where(r => r.FkUserId == userId.Value);
+                }
+
+                return query.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Error retrieving rents", ex);
+            }
         }
     }
 }

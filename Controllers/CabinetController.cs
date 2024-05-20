@@ -27,17 +27,37 @@ namespace Reboost.Controllers
             }
         }
 
+        [HttpGet("{cabinetId}/Batteries")]
+        public IActionResult GetBatteriesByCabinetId(int cabinetId)
+        {
+            try
+            {
+                var batteries = _cabinetService.GetBatteriesByCabinetId(cabinetId);
+
+                if (batteries == null || batteries.Count == 0)
+                {
+                    return NotFound("No batteries found for the given cabinet ID.");
+                }
+
+                return Ok(batteries);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving batteries: {ex.Message}");
+            }
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetCabinetById(int id)
         {
             try
             {
                 var cabinet = _cabinetService.GetCabinetById(id);
+                if (cabinet == null)
+                {
+                    return NotFound("Gabinete não encontrado.");
+                }
                 return Ok(cabinet);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound("Gabinete não encontrado.");
             }
             catch (Exception ex)
             {
@@ -46,11 +66,11 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCabinets()
+        public IActionResult GetAllCabinets([FromQuery] int? cabinetId, [FromQuery] string? addressZipCode)
         {
             try
             {
-                var cabinets = _cabinetService.GetAllCabinets();
+                var cabinets = _cabinetService.GetFilteredCabinets(cabinetId, addressZipCode);
                 return Ok(cabinets);
             }
             catch (Exception ex)

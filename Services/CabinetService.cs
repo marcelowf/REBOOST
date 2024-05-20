@@ -13,24 +13,57 @@ public class CabinetService
     {
         if (cabinet == null) throw new ArgumentNullException(nameof(cabinet));
 
-        cabinet.Id = 0; // Ensure the ID is reset to prevent updates
+        cabinet.Id = 0;
         _context.Cabinets.Add(cabinet);
         _context.SaveChanges();
     }
 
-    public Cabinet GetCabinetById(int id)
+    public List<Battery> GetBatteriesByCabinetId(int cabinetId)
     {
-        var cabinet = _context.Cabinets.Find(id);
-        if (cabinet == null)
+        try
         {
-            throw new KeyNotFoundException("Cabinet not found.");
+            var batteryIds = _context.CabinetBatteries
+                .Where(cb => cb.FkCabinetId == cabinetId)
+                .Select(cb => cb.FkBatteryId)
+                .ToList();
+
+            var batteries = _context.Batteries
+                .Where(b => batteryIds.Contains(b.Id))
+                .ToList();
+
+            return batteries;
         }
-        return cabinet;
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Error retrieving batteries by cabinet ID", ex);
+        }
+    }
+
+    public Cabinet? GetCabinetById(int id)
+    {
+        return _context.Cabinets.FirstOrDefault(c => c.Id == id);
     }
 
     public List<Cabinet> GetAllCabinets()
     {
         return _context.Cabinets.ToList();
+    }
+
+    public List<Cabinet> GetFilteredCabinets(int? cabinetId, string? AddressZipCode)
+    {
+        var query = _context.Cabinets.AsQueryable();
+
+        if (cabinetId.HasValue)
+        {
+            query = query.Where(c => c.Id == cabinetId.Value);
+        }
+
+        if (!string.IsNullOrEmpty(AddressZipCode))
+        {
+            query = query.Where(c => c.AddressZipCode == AddressZipCode);
+        }
+
+        return query.ToList();
     }
 
     public bool DeleteCabinet(int id)

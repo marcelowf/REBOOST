@@ -26,6 +26,33 @@ namespace Reboost.Controllers
             {
                 return NotFound(ex.Message);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetByCabinetId([FromQuery] int? cabinetId)
+        {
+            try
+            {
+                if (cabinetId == null)
+                {
+                    return BadRequest("CabinetId must be provided.");
+                }
+
+                var cabinetBatteries = _cabinetBatteryService.GetByCabinetId(cabinetId.Value);
+                return Ok(cabinetBatteries);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred: " + ex.Message);
+            }
         }
 
         [HttpPost]
