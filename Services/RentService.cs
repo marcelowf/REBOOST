@@ -23,6 +23,8 @@ namespace Reboost
                 throw new ArgumentException("Bateria não encontrada.");
             }
 
+            // Demanda para a retirada da funcionalidade   
+            /*
             var cabinetFrom = _context.Cabinets.FirstOrDefault(c => c.Id == rent.FkCabinetFromId);
             if (cabinetFrom == null)
             {
@@ -34,7 +36,8 @@ namespace Reboost
             {
                 throw new ArgumentException("Gabinete de destino não encontrado.");
             }
-
+            */
+            
             var rentedBattery = _context.Rents.FirstOrDefault(r => r.FkBatteryId == rent.FkBatteryId && r.IsActive);
             if (rentedBattery != null)
             {

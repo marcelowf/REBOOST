@@ -9,8 +9,8 @@ namespace Reboost
         private bool _IsActive;
         private DateTime _BeginDate;
         private DateTime? _FinishDate;
-        private int _FkCabinetFromId;
-        private int _FkCabinetToId;
+        private int? _FkCabinetFromId;
+        private int? _FkCabinetToId;
         private int _FkUserId;
         private int _FkBatteryId;
 
@@ -42,14 +42,14 @@ namespace Reboost
         }
 
         [ForeignKey("FK_Rent_CabinetFrom")]
-        public int FkCabinetFromId
+        public int? FkCabinetFromId
         {
             get { return _FkCabinetFromId; }
             set { _FkCabinetFromId = value; }
         }
 
         [ForeignKey("FK_Rent_CabinetTo")]
-        public int FkCabinetToId
+        public int? FkCabinetToId
         {
             get { return _FkCabinetToId; }
             set { _FkCabinetToId = value; }

@@ -50,6 +50,12 @@ namespace Reboost
                 .HasForeignKey(r => r.FkCabinetToId)
                 .OnDelete(DeleteBehavior.Restrict); 
 
+            modelBuilder.Entity<Rent>()
+                .HasOne<Battery>()
+                .WithMany()
+                .HasForeignKey(r => r.FkBatteryId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
             modelBuilder.Entity<Token>()
                 .HasOne<Cabinet>()
                 .WithMany()

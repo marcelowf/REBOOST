@@ -107,8 +107,8 @@ namespace REBOOST.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinishDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FkCabinetFromId = table.Column<int>(type: "int", nullable: false),
-                    FkCabinetToId = table.Column<int>(type: "int", nullable: false),
+                    FkCabinetFromId = table.Column<int>(type: "int", nullable: true),
+                    FkCabinetToId = table.Column<int>(type: "int", nullable: true),
                     FkUserId = table.Column<int>(type: "int", nullable: false),
                     FkBatteryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -120,13 +120,12 @@ namespace REBOOST.Migrations
                         column: x => x.FkBatteryId,
                         principalTable: "Batteries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Rents_Cabinets_FkCabinetFromId",
                         column: x => x.FkCabinetFromId,
                         principalTable: "Cabinets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Rents_Cabinets_FkCabinetToId",
                         column: x => x.FkCabinetToId,
