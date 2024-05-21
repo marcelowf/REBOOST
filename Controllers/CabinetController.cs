@@ -66,11 +66,21 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCabinets([FromQuery] int? cabinetId, [FromQuery] string? addressZipCode)
+        public IActionResult GetAllCabinets(
+            [FromQuery] int? id,
+            [FromQuery] bool? isActive,
+            [FromQuery] string? externalCode,
+            [FromQuery] string? addressZipCode,
+            [FromQuery] string? addressStreet,
+            [FromQuery] string? addressNumber,
+            [FromQuery] string? addressDistrict,
+            [FromQuery] float? addressLatitude,
+            [FromQuery] float? addressLongitude,
+            [FromQuery] int? drawerNumber)
         {
             try
             {
-                var cabinets = _cabinetService.GetFilteredCabinets(cabinetId, addressZipCode);
+                var cabinets = _cabinetService.GetFilteredCabinets(id, isActive, externalCode, addressZipCode, addressStreet, addressNumber, addressDistrict, addressLatitude, addressLongitude, drawerNumber);
                 return Ok(cabinets);
             }
             catch (Exception ex)

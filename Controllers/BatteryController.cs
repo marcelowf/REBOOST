@@ -46,11 +46,19 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllBatteries([FromQuery] string? brand, [FromQuery] string? model)
+        public IActionResult GetAllBatteries(
+            [FromQuery] int? id,
+            [FromQuery] bool? isActive,
+            [FromQuery] string? externalCode,
+            [FromQuery] string? model,
+            [FromQuery] string? brand,
+            [FromQuery] float? capacity,
+            [FromQuery] float? pricePerHour,
+            [FromQuery] float? totalPrice)
         {
             try
             {
-                var batteries = _batteryService.GetFilteredBatteries(brand, model);
+                var batteries = _batteryService.GetFilteredBatteries(id, isActive, externalCode, model, brand, capacity, pricePerHour, totalPrice);
                 return Ok(batteries);
             }
             catch (Exception ex)

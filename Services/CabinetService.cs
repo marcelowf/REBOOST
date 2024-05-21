@@ -49,18 +49,59 @@ public class CabinetService
         return _context.Cabinets.ToList();
     }
 
-    public List<Cabinet> GetFilteredCabinets(int? cabinetId, string? AddressZipCode)
+    public IEnumerable<Cabinet> GetFilteredCabinets(
+        int? id,
+        bool? isActive,
+        string? externalCode,
+        string? addressZipCode,
+        string? addressStreet,
+        string? addressNumber,
+        string? addressDistrict,
+        float? addressLatitude,
+        float? addressLongitude,
+        int? drawerNumber)
     {
         var query = _context.Cabinets.AsQueryable();
 
-        if (cabinetId.HasValue)
+        if (id.HasValue)
         {
-            query = query.Where(c => c.Id == cabinetId.Value);
+            query = query.Where(c => c.Id == id.Value);
         }
-
-        if (!string.IsNullOrEmpty(AddressZipCode))
+        if (isActive.HasValue)
         {
-            query = query.Where(c => c.AddressZipCode == AddressZipCode);
+            query = query.Where(c => c.IsActive == isActive.Value);
+        }
+        if (!string.IsNullOrEmpty(externalCode))
+        {
+            query = query.Where(c => c.ExternalCode.Contains(externalCode));
+        }
+        if (!string.IsNullOrEmpty(addressZipCode))
+        {
+            query = query.Where(c => c.AddressZipCode.Contains(addressZipCode));
+        }
+        if (!string.IsNullOrEmpty(addressStreet))
+        {
+            query = query.Where(c => c.AddressStreet.Contains(addressStreet));
+        }
+        if (!string.IsNullOrEmpty(addressNumber))
+        {
+            query = query.Where(c => c.AddressNumber.Contains(addressNumber));
+        }
+        if (!string.IsNullOrEmpty(addressDistrict))
+        {
+            query = query.Where(c => c.AddressDistrict.Contains(addressDistrict));
+        }
+        if (addressLatitude.HasValue)
+        {
+            query = query.Where(c => c.AddressLatitude == addressLatitude.Value);
+        }
+        if (addressLongitude.HasValue)
+        {
+            query = query.Where(c => c.AddressLongitude == addressLongitude.Value);
+        }
+        if (drawerNumber.HasValue)
+        {
+            query = query.Where(c => c.DrawerNumber == drawerNumber.Value);
         }
 
         return query.ToList();

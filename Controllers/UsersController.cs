@@ -14,16 +14,20 @@ namespace Reboost.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostUser([FromBody] User user)
+        public IActionResult PostUser(User user)
         {
             try
             {
-                _userService.PostUser(user);
-                return Ok("Funcionário cadastrado com sucesso.");
+                var createdUser = _userService.PostUser(user);
+                if (createdUser == null)
+                {
+                    return Conflict("O e-mail fornecido já está em uso.");
+                }
+                return Ok(createdUser);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Ocorreu um erro ao cadastrar o funcionário: " + ex.Message);
+                return StatusCode(500, "Ocorreu um erro ao criar o usuário: " + ex.Message);
             }
         }
 
@@ -95,11 +99,20 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers([FromQuery] int? userId, [FromQuery] string? email)
+        public IActionResult GetUsers(
+            [FromQuery] int? id,
+            [FromQuery] bool? isAdmin,
+            [FromQuery] bool? isActive,
+            [FromQuery] float? billing,
+            [FromQuery] string? name,
+            [FromQuery] string? email,
+            [FromQuery] string? password,
+            [FromQuery] DateTime? lastLogin,
+            [FromQuery] DateTime? createdAt)
         {
             try
             {
-                var users = _userService.GetUsers(userId, email);
+                var users = _userService.GetFilteredUsers(id, isAdmin, isActive, billing, name, email, password, lastLogin, createdAt);
                 return Ok(users);
             }
             catch (Exception ex)

@@ -11,7 +11,7 @@ public class UserService
     {
         _context = context;
     }
-
+/*
     public void PostUser(User user)
     {
         user.Id = 0;
@@ -22,6 +22,26 @@ public class UserService
 
         _context.Users.Add(user);
         _context.SaveChanges();
+    }
+*/
+    public User? PostUser(User user)
+    {
+        var existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+        if (existingUser != null)
+        {
+            return null;
+        }
+
+        user.Id = 0;
+        user.IsActive = true;
+        user.Billing = 0;
+        user.LastLogin = DateTime.UtcNow;
+        user.CreatedAt = DateTime.UtcNow;
+
+        _context.Users.Add(user);
+        _context.SaveChanges();
+
+        return user;
     }
 
     public User? ValidateUser(string email, string password)
@@ -97,28 +117,57 @@ public class UserService
         }
     }
 
-    public List<User> GetUsers(int? userId, string? email)
+    public IEnumerable<User> GetFilteredUsers(
+        int? id,
+        bool? isAdmin,
+        bool? isActive,
+        float? billing,
+        string? name,
+        string? email,
+        string? password,
+        DateTime? lastLogin,
+        DateTime? createdAt)
     {
-        try
+        var query = _context.Users.AsQueryable();
+
+        if (id.HasValue)
         {
-            var query = _context.Users.AsQueryable();
-
-            if (userId.HasValue)
-            {
-                query = query.Where(u => u.Id == userId.Value);
-            }
-
-            if (!string.IsNullOrEmpty(email))
-            {
-                query = query.Where(u => u.Email == email);
-            }
-
-            return query.ToList();
+            query = query.Where(u => u.Id == id.Value);
         }
-        catch (Exception ex)
+        if (isAdmin.HasValue)
         {
-            throw new ApplicationException("Error retrieving users", ex);
+            query = query.Where(u => u.IsAdmin == isAdmin.Value);
         }
+        if (isActive.HasValue)
+        {
+            query = query.Where(u => u.IsActive == isActive.Value);
+        }
+        if (billing.HasValue)
+        {
+            query = query.Where(u => u.Billing == billing.Value);
+        }
+        if (!string.IsNullOrEmpty(name))
+        {
+            query = query.Where(u => u.Name.Contains(name));
+        }
+        if (!string.IsNullOrEmpty(email))
+        {
+            query = query.Where(u => u.Email.Contains(email));
+        }
+        if (!string.IsNullOrEmpty(password))
+        {
+            query = query.Where(u => u.Password.Contains(password));
+        }
+        if (lastLogin.HasValue)
+        {
+            query = query.Where(u => u.LastLogin >= lastLogin.Value);
+        }
+        if (createdAt.HasValue)
+        {
+            query = query.Where(u => u.CreatedAt >= createdAt.Value);
+        }
+
+        return query.ToList();
     }
 
     public bool DeleteUser(int id)

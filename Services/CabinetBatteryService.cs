@@ -75,18 +75,32 @@ namespace Reboost.Services
             _context.SaveChanges();
         }
 
-        public List<CabinetBattery> GetByCabinetId(int cabinetId)
+        public IEnumerable<CabinetBattery> GetFilteredCabinetBatteries(
+            int? id,
+            int? order,
+            int? fkCabinetId,
+            int? fkBatteryId)
         {
-            var cabinetBatteries = _context.CabinetBatteries
-                .Where(cb => cb.FkCabinetId == cabinetId)
-                .ToList();
+            var query = _context.CabinetBatteries.AsQueryable();
 
-            if (cabinetBatteries == null || !cabinetBatteries.Any())
+            if (id.HasValue)
             {
-                throw new ArgumentException("No batteries found for the given cabinet ID.");
+                query = query.Where(cb => cb.Id == id.Value);
+            }
+            if (order.HasValue)
+            {
+                query = query.Where(cb => cb.Order == order.Value);
+            }
+            if (fkCabinetId.HasValue)
+            {
+                query = query.Where(cb => cb.FkCabinetId == fkCabinetId.Value);
+            }
+            if (fkBatteryId.HasValue)
+            {
+                query = query.Where(cb => cb.FkBatteryId == fkBatteryId.Value);
             }
 
-            return cabinetBatteries;
+            return query.ToList();
         }
     }
 }

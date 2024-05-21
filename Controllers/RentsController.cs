@@ -46,20 +46,20 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllRents([FromQuery] int? userId)
+        public IActionResult GetAllRents(
+            [FromQuery] int? id,
+            [FromQuery] bool? isActive,
+            [FromQuery] DateTime? beginDate,
+            [FromQuery] DateTime? finishDate,
+            [FromQuery] int? fkCabinetFromId,
+            [FromQuery] int? fkCabinetToId,
+            [FromQuery] int? fkUserId,
+            [FromQuery] int? fkBatteryId)
         {
             try
             {
-                if (userId.HasValue)
-                {
-                    var rents = _rentService.GetRentsByUserId(userId.Value);
-                    return Ok(rents);
-                }
-                else
-                {
-                    var rents = _rentService.GetAllRents();
-                    return Ok(rents);
-                }
+                var rents = _rentService.GetFilteredRents(id, isActive, beginDate, finishDate, fkCabinetFromId, fkCabinetToId, fkUserId, fkBatteryId);
+                return Ok(rents);
             }
             catch (Exception ex)
             {

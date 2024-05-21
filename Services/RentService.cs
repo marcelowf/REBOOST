@@ -56,9 +56,52 @@ namespace Reboost
             return _context.Rents.FirstOrDefault(r => r.Id == id);
         }
 
-        public IEnumerable<Rent> GetAllRents()
+        public IEnumerable<Rent> GetFilteredRents(
+            int? id,
+            bool? isActive,
+            DateTime? beginDate,
+            DateTime? finishDate,
+            int? fkCabinetFromId,
+            int? fkCabinetToId,
+            int? fkUserId,
+            int? fkBatteryId)
         {
-            return _context.Rents.ToList();
+            var query = _context.Rents.AsQueryable();
+
+            if (id.HasValue)
+            {
+                query = query.Where(r => r.Id == id.Value);
+            }
+            if (isActive.HasValue)
+            {
+                query = query.Where(r => r.IsActive == isActive.Value);
+            }
+            if (beginDate.HasValue)
+            {
+                query = query.Where(r => r.BeginDate >= beginDate.Value);
+            }
+            if (finishDate.HasValue)
+            {
+                query = query.Where(r => r.FinishDate <= finishDate.Value);
+            }
+            if (fkCabinetFromId.HasValue)
+            {
+                query = query.Where(r => r.FkCabinetFromId == fkCabinetFromId.Value);
+            }
+            if (fkCabinetToId.HasValue)
+            {
+                query = query.Where(r => r.FkCabinetToId == fkCabinetToId.Value);
+            }
+            if (fkUserId.HasValue)
+            {
+                query = query.Where(r => r.FkUserId == fkUserId.Value);
+            }
+            if (fkBatteryId.HasValue)
+            {
+                query = query.Where(r => r.FkBatteryId == fkBatteryId.Value);
+            }
+
+            return query.ToList();
         }
 
         public IEnumerable<Rent> GetRentsByUserId(int userId)

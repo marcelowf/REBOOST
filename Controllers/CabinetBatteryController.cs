@@ -33,25 +33,20 @@ namespace Reboost.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByCabinetId([FromQuery] int? cabinetId)
+        public IActionResult GetAllCabinetBattery(
+            [FromQuery] int? id,
+            [FromQuery] int? order,
+            [FromQuery] int? fkCabinetId,
+            [FromQuery] int? fkBatteryId)
         {
             try
             {
-                if (cabinetId == null)
-                {
-                    return BadRequest("CabinetId must be provided.");
-                }
-
-                var cabinetBatteries = _cabinetBatteryService.GetByCabinetId(cabinetId.Value);
+                var cabinetBatteries = _cabinetBatteryService.GetFilteredCabinetBatteries(id, order, fkCabinetId, fkBatteryId);
                 return Ok(cabinetBatteries);
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An unexpected error occurred: " + ex.Message);
+                return StatusCode(500, "An unexpected error occurred with GetAllCabinetBattery: " + ex.Message);
             }
         }
 

@@ -26,18 +26,49 @@ public class BatteryService
         return _context.Batteries.ToList();
     }
 
-    public List<Battery> GetFilteredBatteries(string? brand, string? model)
+    public IEnumerable<Battery> GetFilteredBatteries(
+        int? id,
+        bool? isActive,
+        string? externalCode,
+        string? model,
+        string? brand,
+        float? capacity,
+        float? pricePerHour,
+        float? totalPrice)
     {
         var query = _context.Batteries.AsQueryable();
 
-        if (!string.IsNullOrEmpty(brand))
+        if (id.HasValue)
         {
-            query = query.Where(b => b.Brand == brand);
+            query = query.Where(b => b.Id == id.Value);
         }
-
+        if (isActive.HasValue)
+        {
+            query = query.Where(b => b.IsActive == isActive.Value);
+        }
+        if (!string.IsNullOrEmpty(externalCode))
+        {
+            query = query.Where(b => b.ExternalCode.Contains(externalCode));
+        }
         if (!string.IsNullOrEmpty(model))
         {
-            query = query.Where(b => b.Model == model);
+            query = query.Where(b => b.Model.Contains(model));
+        }
+        if (!string.IsNullOrEmpty(brand))
+        {
+            query = query.Where(b => b.Brand.Contains(brand));
+        }
+        if (capacity.HasValue)
+        {
+            query = query.Where(b => b.Capacity == capacity.Value);
+        }
+        if (pricePerHour.HasValue)
+        {
+            query = query.Where(b => b.PricePerHour == pricePerHour.Value);
+        }
+        if (totalPrice.HasValue)
+        {
+            query = query.Where(b => b.TotalPrice == totalPrice.Value);
         }
 
         return query.ToList();
