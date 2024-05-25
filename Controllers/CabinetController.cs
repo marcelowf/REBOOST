@@ -26,13 +26,22 @@ namespace Reboost.Controllers
                 return StatusCode(500, "Ocorreu um erro ao cadastrar o gabinete: " + ex.Message);
             }
         }
-
+        
         [HttpGet("{cabinetId}/Batteries")]
-        public IActionResult GetBatteriesByCabinetId(int cabinetId)
+        public IActionResult GetBatteriesByCabinetId(
+            int cabinetId,
+            [FromQuery] int? id,
+            [FromQuery] bool? isActive,
+            [FromQuery] string externalCode,
+            [FromQuery] string model,
+            [FromQuery] string brand,
+            [FromQuery] float? capacity,
+            [FromQuery] float? pricePerHour,
+            [FromQuery] float? totalPrice)
         {
             try
             {
-                var batteries = _cabinetService.GetBatteriesByCabinetId(cabinetId);
+                var batteries = _cabinetService.GetBatteriesByCabinetId(cabinetId, id, isActive, externalCode, model, brand, capacity, pricePerHour, totalPrice);
 
                 if (batteries == null || batteries.Count == 0)
                 {
@@ -46,6 +55,7 @@ namespace Reboost.Controllers
                 return BadRequest($"Error retrieving batteries: {ex.Message}");
             }
         }
+
 
         [HttpGet("{id}")]
         public IActionResult GetCabinetById(int id)

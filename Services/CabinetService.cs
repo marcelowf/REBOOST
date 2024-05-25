@@ -18,7 +18,16 @@ public class CabinetService
         _context.SaveChanges();
     }
 
-    public List<Battery> GetBatteriesByCabinetId(int cabinetId)
+    public List<Battery> GetBatteriesByCabinetId(
+        int cabinetId,
+        int? id,
+        bool? isActive,
+        string externalCode,
+        string model,
+        string brand,
+        float? capacity,
+        float? pricePerHour,
+        float? totalPrice)
     {
         try
         {
@@ -27,11 +36,54 @@ public class CabinetService
                 .Select(cb => cb.FkBatteryId)
                 .ToList();
 
-            var batteries = _context.Batteries
-                .Where(b => batteryIds.Contains(b.Id))
-                .ToList();
+            var query = _context.Batteries.AsQueryable();
 
-            return batteries;
+            if (batteryIds.Any())
+            {
+                query = query.Where(b => batteryIds.Contains(b.Id));
+            }
+
+            if (id.HasValue)
+            {
+                query = query.Where(b => b.Id == id.Value);
+            }
+
+            if (isActive.HasValue)
+            {
+                query = query.Where(b => b.IsActive == isActive.Value);
+            }
+
+            if (!string.IsNullOrEmpty(externalCode))
+            {
+                query = query.Where(b => b.ExternalCode == externalCode);
+            }
+
+            if (!string.IsNullOrEmpty(model))
+            {
+                query = query.Where(b => b.Model == model);
+            }
+
+            if (!string.IsNullOrEmpty(brand))
+            {
+                query = query.Where(b => b.Brand == brand);
+            }
+
+            if (capacity.HasValue)
+            {
+                query = query.Where(b => b.Capacity == capacity.Value);
+            }
+
+            if (pricePerHour.HasValue)
+            {
+                query = query.Where(b => b.PricePerHour == pricePerHour.Value);
+            }
+
+            if (totalPrice.HasValue)
+            {
+                query = query.Where(b => b.TotalPrice == totalPrice.Value);
+            }
+
+            return query.ToList();
         }
         catch (Exception ex)
         {

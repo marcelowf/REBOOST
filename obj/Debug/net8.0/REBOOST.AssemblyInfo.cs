@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("REBOOST")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a69c07f16e1962dcb184a4301c7f89908895a43")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+037094fcab2ed53a0d76723e788a70584dd32be5")]
 [assembly: System.Reflection.AssemblyProductAttribute("REBOOST")]
 [assembly: System.Reflection.AssemblyTitleAttribute("REBOOST")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

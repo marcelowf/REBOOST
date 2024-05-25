@@ -11,19 +11,7 @@ public class UserService
     {
         _context = context;
     }
-/*
-    public void PostUser(User user)
-    {
-        user.Id = 0;
-        user.IsActive = true;
-        user.Billing = 0;
-        user.LastLogin = DateTime.UtcNow;
-        user.CreatedAt = DateTime.UtcNow;
-
-        _context.Users.Add(user);
-        _context.SaveChanges();
-    }
-*/
+    
     public User? PostUser(User user)
     {
         var existingUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
